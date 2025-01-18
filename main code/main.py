@@ -1,4 +1,3 @@
-# import thư viện
 import numpy as np
 from tensorflow.keras.models import load_model
 import cvzone
@@ -42,8 +41,8 @@ while True:
 
                 x, y, x2, y2 = box.xyxy[0] # Đây là mảng 2D: [[data]]
                 x, y, x2, y2 = int(x), int(y), int(x2), int(y2)  # Ép về kiểu nguyên mới vẽ box được
-                w = x2 - x
-                h = y2 - y
+                w = x2 - x # width: chiều rộng
+                h = y2 - y # height: chiều cao
 
                 # Vẽ bounding box
                 cvzone.cornerRect(frame, [x, y, w, h],l= 3,rt= 3)
@@ -72,8 +71,9 @@ while True:
                             color= (0, 255, 255),
                             thickness= 2
                             )
-                print(arr_predict, lb[predicted_label_index[0]]) # Hiển thị data lên màn console
+                print(arr_predict, lb[predicted_label_index[0]]) # Hiển thị data lên màn console, mảng 2D
     
+    # Hiển thị frame ra bên ngoài cửa sổ
     cv2.imshow('Face Recognizer', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
