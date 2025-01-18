@@ -1,0 +1,9 @@
+numpy
+tensorflow
+cvzone
+ultralytics
+pickle
+opencv-python
+time
+cvzone
+sklearn
