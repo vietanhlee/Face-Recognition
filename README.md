@@ -1,16 +1,20 @@
 
 # Sơ qua về project
 
+## Lý thuyết áp dụng  
 Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt. Các gương mặt được cắt trực tiếp nhờ model YOLO đã được pre-train.
 
 ![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
-<p align = 'center'> <em>Minh họa cấu trúc mạng CNN <em></p>
+<p align = 'center'> Minh họa cấu trúc mạng CNN </p>
+
+![](https://oditeksolutions.com/wp-content/uploads/2025/01/Fashionable-Blog-Banner.webp)
+<p align = 'center'> Phát hiện gương mặt với YOLO </p>
 
 # Cách chạy
 ## 1. Cài đặt các thư viện cần thiết (python 3.10)
-- Clone dự án về và chạy dòng lệnh sau để cài thư viện cần thiết:
+- Clone dự án về và chạy dòng lệnh sau trên command Prompt để cài thư viện cần thiết:
 
-```
+``` bash
 pip install -r requires.txt
 ```
 

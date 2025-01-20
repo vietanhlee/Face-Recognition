@@ -28,7 +28,7 @@ for item in list_lable:
         lable.append(item)
 
     # In ra màn thông báo
-    print('Đã xử lý xong ảnh của: {item} với số ảnh: {len(list_image)}')
+    print(f'Đã xử lý xong ảnh của: {item} với số ảnh: {len(list_image)}')
 
 # Chuyển data và lable về np.array vì tensorflow yêu cầu đầu vào là np.array, lable cần đưa về dạng 2D
 data_img = np.array(data_img) 
@@ -36,12 +36,12 @@ cat_lable = set(lable.copy())
 lable = np.array(lable).reshape(-1, 1) # Có thể dùng expand_dim cũng được
 
 # Hiển thị ra màn console
-print('shape của data: {data_img.shape} với các lable {cat_lable}')
+print(f'shape của data: {data_img.shape} với các lable {cat_lable}')
 
 # Lưu data và lable vào tệp để xong train
 import pickle
-os.makedirs('processed', exist_ok= True)
-with open('processed\\data.pkl', 'wb') as f:
+os.makedirs('data_processed', exist_ok= True)
+with open('data_processed\\data.pkl', 'wb') as f:
     pickle.dump(data_img, f)
-with open('processed\\lable.pkl', 'wb') as f:
+with open('data_processed\\lable.pkl', 'wb') as f:
     pickle.dump(lable, f)
