@@ -2,14 +2,24 @@ import cv2
 import os
 from ultralytics import YOLO
 import cv2
+from keras.api.layers import RandomBrightness, RandomContrast
+from keras.api.models import Sequential
+import numpy as np
+import cvzone
+
+# Tạo lớp tăng cường dữ liệu
+data_augmentation = Sequential([
+    RandomBrightness(0.25),           # Thay đổi độ sáng ngẫu nhiên +- 25%
+    RandomContrast(0.25),             # Thay đổi độ tương phản +- 25%
+])
 
 # Load model pre train
-facemodel = YOLO('yolov11n-face.pt')
+facemodel = YOLO('model/yolov11n-face.pt')
 
 class ImageDetect():
     '''Input is image read by cv2.read, name_lable is name of persion is taken'''
-    def __init__(self, image, name_lable, index):
-        self.image = image # Ảnh số hóa được đưa vào cv2.read(img_path)
+    def __init__(self, image_input, name_lable, index):
+        self.image_output = image_input.copy() # Ảnh số hóa được đưa vào cv2.read(img_path)
         self.name_lable = name_lable # Nhãn được đánh 
         self.index = index # Dùng đặt tên tệp ảnh gương mặt sau crop
         self.check = 1 # kiểm tra sự tồn tại của gương mặt trong khung hình
@@ -19,34 +29,50 @@ class ImageDetect():
         self.w = 0 # width: chiều rộng
         self.h = 0 # height: chiều cao
 
+        self.process()
+
+    def process(self):
         # Tạo thư mục chứa ảnh: data_image_raw\name_lable\out{index}.jpg
         os.makedirs("data_image_raw" + "\\" + self.name_lable, exist_ok= True)
-        
         # Data về gương mặt
-        face_result = facemodel.predict(self.image,conf = 0.6)
+        face_result = facemodel.predict(self.image_output, conf = 0.6, verbose = False)
 
+        # Thông số các box
+        boxes_xyxy = face_result[0].boxes.xyxy.tolist()
         # Kiểm tra và cắt khuôn mặt
-        if len(face_result[0].boxes) == 0:
+        if len(boxes_xyxy) == 0:
             self.check = 0 # Update biến check
             print("Không phát hiện khuôn mặt nào trong ảnh.")
         else:
-            for info in face_result:
-                parameters = info.boxes # Lấy các box
-                for box in parameters:
-                    x1, y1, x2, y2 = box.xyxy[0] # Do mảng 2D
-                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2) # Chuyển về kiểu nguyên vì openCV yêu cầu nguyên
-                    h, w = y2 - y1, x2 - x1
-                    
-                    # Update thông số
-                    self.x = x1
-                    self.y = y1
-                    self.w = w
-                    self.h = h
+            for box in boxes_xyxy:
+                # Chuyển về kiểu nguyên vì openCV yêu cầu nguyên
+                x1, y1, x2, y2 = map(int, box)
+                h, w = y2 - y1, x2 - x1
+                
+                # Update thông số box
+                self.x = x1
+                self.y = y1
+                self.w = w
+                self.h = h
 
-                    # Ảnh mặt được cắt ra và resize theo tiêu chuẩn
-                    img_cut = self.image[y1: y1 + h, x1: x1 + w]
-                    img_cut = cv2.resize(img_cut, (128, 128))
-                    # Lưu ảnh vào thư mục vừa tạo thông qua đường dẫn đã tạo
-                    cv2.imwrite(f'data_image_raw\\{self.name_lable}\\out{self.index}.jpg', img= img_cut)
-                    # Thông báo ra màn hìn
-                    print(f'Đã lưu ảnh thứ {self.index} của {self.name_lable}')
+                # Ảnh mặt được cắt ra và resize theo tiêu chuẩn
+                img_cut = self.image_output[y1: y1 + h, x1: x1 + w]
+                img_cut = cv2.resize(img_cut, (128, 128))
+                
+                # Thực hiện tăng cường dữ liệu, thêm batch dimension do yêu cầu input_shape
+                augmented_image = data_augmentation(np.expand_dims(img_cut, axis=0), training=True) 
+
+                # Chuyển tensor thành định dạng NumPy
+                image_to_save = augmented_image[0].numpy().astype("float32")  # Loại bỏ batch dimension và chuyển kiểu dữ liệu
+                
+                # Lưu ảnh vào thư mục vừa tạo thông qua đường dẫn đã tạo
+                cv2.imwrite(f'data_image_raw\\{self.name_lable}\\out{self.index}.jpg', img= image_to_save)
+
+                # Thông báo ra màn hình
+                print(f'Đã lưu ảnh thứ {self.index} của {self.name_lable}')
+
+                cvzone.cornerRect(self.image_output, [x1, y1, w, h], rt = 0)
+                # Text chỉ dẫn nằm ngay trên bouding box
+                cv2.putText(img = self.image_output, text = f'Da luu anh thu {self.index} cua {self.name_lable}',
+                        org = (int(x1 - 70), int(y1 - 20)), fontFace = cv2.FONT_HERSHEY_SIMPLEX, 
+                        fontScale = 1, color = (0, 128, 255), thickness = 2)  
