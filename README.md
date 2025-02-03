@@ -56,6 +56,8 @@
 
     - Làm tương tự cho những người còn lại đến khi hết.
 
+    ![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/thu%20thap.png)
+    <p align = 'center'> Thu thập hình ảnh gương mặt </p>
 
 ## 3. Xử lý data
 
@@ -64,7 +66,8 @@
 ## 4. Chạy code
 
 Chỉ cần chạy file `main code\main.py` để bắt đầu sử dụng.
-
+![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/chay.png)
+    <p align = 'center'> Chạy thử </p>
 # Nhận xét:
 
 Mô hình huấn luyện tương đối hiệu quả trong phạm vi tập data lớn gồm nhiều gương mặt được train, nhưng lại dễ bị overfiting hoặc kém hiệu quả hơn với tập data ít, số người ít vì mô hình học được rất dễ bị một đặc điểm trội nào đó (màu sắc, góc độ) từ 1 gương mặt làm sai lệch đi kết quả dự đoán.
