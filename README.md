@@ -2,10 +2,10 @@
 
 ## Lý thuyết áp dụng  
 
-Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt. Các gương mặt trên được cắt trực tiếp nhờ model nhận diện gương mặt người đã được pre-trained.
+Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt. Các gương mặt trên được cắt trực tiếp nhờ model phát hiện gương mặt người được train trên cấu trúc YOLO dựa theo dataset về gương mặt con người đã được gán nhãn.
 
 ![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
-<p align = 'center'> Minh họa cấu trúc mạng CNN </p>
+<p align = 'center'> Minh họa cấu trúc CNN </p>
 
 ![](https://oditeksolutions.com/wp-content/uploads/2025/01/Fashionable-Blog-Banner.webp)
 <p align = 'center'> Phát hiện gương mặt với YOLO </p>
@@ -24,7 +24,7 @@
 
 
 
-- **Bước 1:** Xóa sạch các thư mục trong foder `data_image_raw`
+- **Bước 1:** Xóa sạch các thư mục trong foder `data_image_raw` nếu nó có tồn tại
 
 - **Bước 2:**
 
@@ -49,19 +49,22 @@
       
       > Truyền tên người cần lấy data vào dòng này trong file: 
         ``` python
-            MakeDataFace('viet anh')
+            MakeDataFace('Viet Anh')
          ```
 
-      nhìn thẳng vào camerea rồi bấm `run` để chương trình tự động lấy đủ 500 gương mặt. Nên quay nhiều hướng khác nhau để data đa dạng, tránh overfitting.
+      nhìn thẳng vào camerea rồi bấm `run` để chương trình tự động lấy đủ 500 gương mặt. Nên quay nhiều hướng khác nhau để data đa dạng, tránh overfitting. Code tự điều chỉnh ánh sáng và tương phản nên không nhất thiết cần thu thập gương mặt mọi người ở cùng vị trí (nhưng có vẫn là hơn)
 
     - Làm tương tự cho những người còn lại đến khi hết.
 
     ![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/thu%20thap.png)
     <p align = 'center'> Thu thập hình ảnh gương mặt </p>
+    
+    > Ảnh sau khi được thu thập sẽ được lưu vào thư mục `data_image_raw/ten_người_đó`
+
 
 ## 3. Xử lý data
 
-- Chạy file `training_data.ipynb` để tiến hành training và xuất ra model.
+- Chạy file `training_data.ipynb` để tiến hành xử lý dữ liệu thô sau đó training và xuất ra model cuối ở: `model/model_cnn.h5`.
 
 ## 4. Chạy code
 
@@ -70,6 +73,9 @@ Chỉ cần chạy file `main code\main.py` để bắt đầu sử dụng.
     <p align = 'center'> Chạy thử </p>
 # Nhận xét:
 
-Mô hình huấn luyện tương đối hiệu quả trong phạm vi tập data lớn gồm nhiều gương mặt được train, nhưng lại dễ bị overfiting hoặc kém hiệu quả hơn với tập data ít, số người ít vì mô hình học được rất dễ bị một đặc điểm trội nào đó (màu sắc, góc độ) từ 1 gương mặt làm sai lệch đi kết quả dự đoán.
+Mô hình huấn luyện tương đối hiệu quả trong phạm vi tập data lớn gồm nhiều gương mặt được train, nhưng lại dễ bị overfiting hoặc kém hiệu quả hơn với tập data ít, số người ít vì mô hình học được rất dễ bị một đặc điểm trội nào đó (màu sắc, góc độ) từ 1 gương mặt làm sai lệch đi kết quả dự đoán mặc dù đã tăng cường làm giàu dữ liệu như tăng giảm độ sáng và độ tương phản.
+
+> Với một số ít dataset có thể dùng so sánh khoảng cách norm từ ảnh được cắt đến tập dataset và chọn ra ảnh có khoảng cách nhỏ nhất làm nhãn.
 
 # Dự án đang tích hợp thêm trên Qt5
+
