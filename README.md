@@ -16,9 +16,9 @@
 
 - Clone dự án về và chạy dòng lệnh sau trên command Prompt để cài thư viện cần thiết:
 
-``` bash
-    pip install -r requires.txt
-```
+  ``` bash
+      pip install -r 'requirements.txt'
+  ```
 
 ## 2. Chuẩn bị data
 
