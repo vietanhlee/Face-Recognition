@@ -18,20 +18,24 @@ class MakeDataFace():
             if not check_done:
                 print("Không đọc được ảnh")
                 break
+            
+            # Đảo ngược ảnh
+            frame = cv2.flip(frame, 1) 
 
-            frame = cv2.flip(frame, 1) # Đảo ngược ảnh
-    
+            # Gọi đối tượng
             ID = ImageDetect(image_input= frame, name_lable= self.name_lable, index= self.count)
-           
+
+            # Nếu tồn tại gương mặt thì mới tăng count lên 1
             if(ID.check == 1):
                 self.count += 1
-                        
+                            
             cv2.imshow('Make data face', ID.image_output)
 
             if (cv2.waitKey(1) & 0xFF == ord('q')) or self.count == 500:
                 break
             time.sleep(0.06)
-
+        
+        # Giải phóng tài nguyên camera
         cap.release()
         cv2.destroyAllWindows()
 

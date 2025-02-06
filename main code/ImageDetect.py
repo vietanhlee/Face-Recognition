@@ -17,28 +17,31 @@ data_augmentation = Sequential([
 facemodel = YOLO('model/yolov11n-face.pt')
 
 class ImageDetect():
-    '''Input is image read by cv2.read, name_lable is name of persion is taken'''
+    '''Đầu vào là mảng np.darray được đọc từ cv2, tên người lấy data và index để đặt tên thư mục chứa ảnh'''
     def __init__(self, image_input, name_lable, index):
         self.image_output = image_input.copy() # Ảnh số hóa được đưa vào cv2.read(img_path)
         self.name_lable = name_lable # Nhãn được đánh 
         self.index = index # Dùng đặt tên tệp ảnh gương mặt sau crop
         self.check = 1 # kiểm tra sự tồn tại của gương mặt trong khung hình
+        
         # Thông số ảnh crop khuôn mặt, phục vụ cho trích xuất data bên ngoài
         self.x = 0
         self.y = 0
         self.w = 0 # width: chiều rộng
         self.h = 0 # height: chiều cao
 
+        # Chạy hàm process ngay
         self.process()
 
     def process(self):
         # Tạo thư mục chứa ảnh: data_image_raw\name_lable\out{index}.jpg
         os.makedirs("data_image_raw" + "\\" + self.name_lable, exist_ok= True)
-        # Data về gương mặt
+        # Data dự đoán
         face_result = facemodel.predict(self.image_output, conf = 0.6, verbose = False)
 
         # Thông số các box
         boxes_xyxy = face_result[0].boxes.xyxy.tolist()
+        
         # Kiểm tra và cắt khuôn mặt
         if len(boxes_xyxy) == 0:
             self.check = 0 # Update biến check
@@ -59,8 +62,8 @@ class ImageDetect():
                 img_cut = self.image_output[y1: y1 + h, x1: x1 + w]
                 img_cut = cv2.resize(img_cut, (128, 128))
                 
-                # Thực hiện tăng cường dữ liệu, thêm batch dimension do yêu cầu input_shape
-                augmented_image = data_augmentation(np.expand_dims(img_cut, axis=0), training=True) 
+                # Thực hiện tăng cường dữ liệu, thêm batch dimension do yêu cầu input_shape có bath_size thêm ở đầu
+                augmented_image = data_augmentation(np.expand_dims(img_cut, axis= 0), training= True) 
 
                 # Chuyển tensor thành định dạng NumPy
                 image_to_save = augmented_image[0].numpy().astype("float32")  # Loại bỏ batch dimension và chuyển kiểu dữ liệu
@@ -71,8 +74,10 @@ class ImageDetect():
                 # Thông báo ra màn hình
                 print(f'Đã lưu ảnh thứ {self.index} của {self.name_lable}')
 
+                # Vẽ bounding box
                 cvzone.cornerRect(self.image_output, [x1, y1, w, h], rt = 0)
-                # Text chỉ dẫn nằm ngay trên bouding box
+                
+                # Vẽ text chỉ dẫn nằm ngay trên bouding box
                 cv2.putText(img = self.image_output, text = f'Da luu anh thu {self.index} cua {self.name_lable}',
                         org = (int(x1 - 70), int(y1 - 20)), fontFace = cv2.FONT_HERSHEY_SIMPLEX, 
                         fontScale = 1, color = (0, 128, 255), thickness = 2)  
