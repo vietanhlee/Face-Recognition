@@ -3,8 +3,8 @@ from ImageDetect import ImageDetect
 import time
 
 class MakeDataFace():
-    def __init__(self, name_lable):
-        self.name_lable = name_lable # Tên gương mặt đánh nhãn
+    def __init__(self, name_label):
+        self.name_label = name_label # Tên gương mặt đánh nhãn
         self.count = 0 # Biến đếm số ảnh đã được chụp
 
         # Khởi tạo camera
@@ -23,7 +23,7 @@ class MakeDataFace():
             frame = cv2.flip(frame, 1) 
 
             # Gọi đối tượng
-            ID = ImageDetect(image_input= frame, name_lable= self.name_lable, index= self.count)
+            ID = ImageDetect(image_input= frame, name_label= self.name_label, index= self.count)
 
             # Nếu tồn tại gương mặt thì mới tăng count lên 1
             if(ID.check == 1):

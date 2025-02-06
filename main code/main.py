@@ -7,10 +7,10 @@ import pickle
 
 path_model = 'model/model_cnn.h5'
 
-# Lấy lable của data là file chứa categories của OneHotEnCoder()
+# Lấy label của data là file chứa categories của OneHotEnCoder()
 with open('model/categories.pkl', 'rb') as f:
     cat = pickle.load(f)
-lb = np.array(cat[0]) # cat là mảng 2 chiều vd: [['lable']], chuyển về numpy để thao tác tiện luôn
+lb = np.array(cat[0]) # cat là mảng 2 chiều vd: [['label']], chuyển về numpy để thao tác tiện luôn
 
 # Load model đã train nhận diện gương mặt
 model = load_model(path_model)
