@@ -1,5 +1,5 @@
 import numpy as np
-from tensorflow.keras.models import load_model
+from tensorflow.keras.models import load_model # type: ignore
 import cvzone
 from ultralytics import YOLO
 import cv2

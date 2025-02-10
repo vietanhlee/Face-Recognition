@@ -1,14 +1,24 @@
 # Sơ qua về project
 
 ## Lý thuyết áp dụng  
+### Phát hiện gương mặt
 
-Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt. Các gương mặt trên được cắt trực tiếp nhờ model phát hiện gương mặt người được train trên cấu trúc YOLO dựa theo dataset về gương mặt con người đã được gán nhãn.
+- Các gương mặt trên được cắt trực tiếp nhờ model phát hiện gương mặt người được train trên mạng YOLO dựa theo dataset về gương mặt con người đã được gán nhãn theo format của YOLO v11
 
-![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
-<p align = 'center'> Minh họa cấu trúc CNN </p>
+  > YOLO là một mô hình mạng CNN cho việc phát hiện, nhận dạng, phân loại đối tượng. Yolo được tạo ra từ việc kết hợp giữa các convolutional layers và connected layers.Trong đóp các convolutional layers sẽ trích xuất ra các feature của ảnh, còn full-connected layers sẽ dự đoán ra xác suất đó và tọa độ của đối tượng. Thông tin về YOLO có thể tìm thấy ở [đây](https://docs.ultralytics.com/#what-are-the-licensing-options-available-for-ultralytics-yolo)
 
-![](https://oditeksolutions.com/wp-content/uploads/2025/01/Fashionable-Blog-Banner.webp)
-<p align = 'center'> Phát hiện gương mặt với YOLO </p>
+
+   ![](https://oditeksolutions.com/wp-content/uploads/2025/01/Fashionable-Blog-Banner.webp)
+  <p align = 'center'> Phát hiện gương mặt với YOLO </p>
+
+### Nhận diện các gương mặt
+
+- Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt.
+
+ ![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
+  <p align = 'center'> Minh họa cấu trúc CNN </p>
+
+
 
 # Cách chạy
 
@@ -30,7 +40,7 @@
 
   - Nếu đã có data về các gương mặt, chỉ cần thêm vào thư mục `data_image_raw` theo cấu trúc sau:
 
-    Mỗi thư mục của mỗi người là ảnh các gương mặt của người đó:
+    Mỗi thư mục của mỗi người là ảnh cắt gương mặt của người đó:
 
     ```
     data_image_raw   
@@ -71,11 +81,21 @@
 Chỉ cần chạy file `main code\main.py` để bắt đầu sử dụng.
 ![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/chay.png)
     <p align = 'center'> Chạy thử </p>
-# Nhận xét:
 
-Mô hình huấn luyện tương đối hiệu quả trong phạm vi tập data lớn gồm nhiều gương mặt được train, nhưng lại dễ bị overfiting hoặc kém hiệu quả hơn với tập data ít, số người ít vì mô hình học được rất dễ bị một đặc điểm trội nào đó (màu sắc, góc độ) từ 1 gương mặt làm sai lệch đi kết quả dự đoán mặc dù đã tăng cường làm giàu dữ liệu như tăng giảm độ sáng và độ tương phản.
+# Nhận xét
 
-> Với một số ít dataset có thể dùng so sánh khoảng cách norm từ ảnh được cắt đến tập dataset và chọn ra ảnh có khoảng cách nhỏ nhất làm nhãn.
+## Ưu điểm
+- Mô hình huấn luyện tương đối hiệu quả trong phạm vi tập data lớn gồm nhiều gương mặt được train, 
 
-# Dự án đang tích hợp thêm trên Qt5
+- Phân loại hiểu quả hơn so với phương pháp chiết xuất đặc trưng của từng gương mặt và so sánh sự giống nhau của nó và chiết xuất đặc trưng dữ liệu cần được dự đoán khi đưa vào.
 
+## Nhược điểm
+- Dễ bị overfiting hoặc kém hiệu quả hơn với tập data ít, số người ít vì mô hình học được rất dễ bị một đặc điểm trội nào đó (màu sắc, góc độ) từ 1 gương mặt làm sai lệch đi kết quả dự đoán mặc dù đã tăng cường làm giàu dữ liệu như tăng giảm độ sáng và độ tương phản.
+
+# Tích hợp thêm trên Qt5
+
+Project tích hợp trên PyQt5 [tại đây](https://github.com/vietanhlee/face-recognition-Qt5)
+
+![](https://raw.githubusercontent.com/vietanhlee/face-recognition-Qt5/refs/heads/main/display_github/Screenshot%202025-02-09%20000604.png)
+
+<p align = 'center'> Demo Qt5 </p>

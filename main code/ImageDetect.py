@@ -17,13 +17,15 @@ data_augmentation = Sequential([
 facemodel = YOLO('model/yolov11n-face.pt')
 
 class ImageDetect():
-    '''Đầu vào là mảng np.darray được đọc từ cv2, tên người lấy data và index để đặt tên thư mục chứa ảnh'''
+    '''Đầu vào là mảng np.darray được đọc từ cv2, tên người lấy data và index để đặt tên thư mục chứa ảnh
+class này chủ yếu sẽ lưu tạo thư mục chứa tên là name_label và thực hiện nhận diện gương mặt sau đó cắt và lưu ảnh vào thư mục ấy
+đồng thời hiển thị một số chú thích về quá trình lên ảnh đầu ra là image_output'''
     def __init__(self, image_input, name_label, index):
         self.image_output = image_input.copy() # Ảnh số hóa được đưa vào cv2.read(img_path)
         self.name_label = name_label # Nhãn được đánh 
         self.index = index # Dùng đặt tên tệp ảnh gương mặt sau crop
         self.check = 1 # kiểm tra sự tồn tại của gương mặt trong khung hình
-        
+        self.img_face = None
         # Thông số ảnh crop khuôn mặt, phục vụ cho trích xuất data bên ngoài
         self.x = 0
         self.y = 0
@@ -34,6 +36,8 @@ class ImageDetect():
         self.process()
 
     def process(self):
+        '''Khi chạy hàm này sẽ lưu tạo thưu mục chứa tên là name_label và thực hiện nhận diện gương mặt sau đó cắt và lưu ảnh vào thư mục ấy
+đồng thời hiển thị một số chú thích về quá trình lên ảnh đầu ra là image_output'''
         # Tạo thư mục chứa ảnh: data_image_raw\name_label\out{index}.jpg
         os.makedirs("data_image_raw" + "\\" + self.name_label, exist_ok= True)
         # Data dự đoán
@@ -61,6 +65,7 @@ class ImageDetect():
                 # Ảnh mặt được cắt ra và resize theo tiêu chuẩn
                 img_cut = self.image_output[y1: y1 + h, x1: x1 + w]
                 img_cut = cv2.resize(img_cut, (128, 128))
+                self.img_face = img_cut.copy()
                 
                 # Thực hiện tăng cường dữ liệu, thêm batch dimension do yêu cầu input_shape có bath_size thêm ở đầu
                 augmented_image = data_augmentation(np.expand_dims(img_cut, axis= 0), training= True) 
