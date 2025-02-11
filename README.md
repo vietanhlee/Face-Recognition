@@ -1,6 +1,6 @@
 # Sơ qua về project
 
-## Lý thuyết áp dụng  
+## Cơ sở lý thuyết 
 ### Phát hiện gương mặt
 
 - Các gương mặt trên được cắt trực tiếp nhờ model phát hiện gương mặt người được train trên mạng YOLO dựa theo dataset về gương mặt con người đã được gán nhãn theo format của YOLO v11
@@ -12,28 +12,23 @@
   <p align = 'center'> Phát hiện gương mặt với YOLO </p>
 
 ### Nhận diện các gương mặt
+- Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt. Các gương mặt được thu thập, gán nhãn, sau đó tiền xử lý dữ liệu và đưa vào CNN để train tạo ra model có thể phân biệt gương mặt mỗi người
 
-- Ứng dụng mô hình CNN để train dữ liệu nhận diện các gương mặt.
+  > Layer cuối cùng là lớp Dense có số unit bằng số người cần phân biệt và activation là hàm softmax. Từ đó có thể phát triển code nhận diện gương mặt (nếu độ tin cậy < 90% thì gán nhãn là 'unknow' ngược lại thì ghhi nhãn của nó lên màn hình)
 
- ![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
-  <p align = 'center'> Minh họa cấu trúc CNN </p>
-
-
+  ![](https://cdn.analyticsvidhya.com/wp-content/uploads/2024/10/59954intro-to-CNN.webp)
+    <p align = 'center'> Minh họa cấu trúc CNN </p>
 
 # Cách chạy
-
 ## 1. Cài đặt các thư viện cần thiết (python 3.10)
 
 - Clone dự án về và chạy dòng lệnh sau trên command Prompt để cài thư viện cần thiết:
 
   ``` bash
-      pip install -r 'requirements.txt'
+  pip install -r 'requirements.txt'
   ```
 
 ## 2. Chuẩn bị data
-
-
-
 - **Bước 1:** Xóa sạch các thư mục trong foder `data_image_raw` nếu nó có tồn tại
 
 - **Bước 2:**
@@ -50,7 +45,7 @@
             └── tên người thứ n
     ```
 
-    > Số lượng các ảnh mỗi người nên đồng đều nhau và các tính chất như màu sắc và độ sáng nên tương đồng nhau
+    > Số lượng các ảnh mỗi người nên đồng đều nhau và nên thu thập dữ liệu ở cùng một ví trí 
 
 
   - Nếu chưa có bất kỳ data nào (cần ít nhất 2 người để lấy data):
@@ -58,18 +53,18 @@
     - Vào file `main code\make_data_face` và chỉnh tên người cần lấy dữ liệu:
       
       > Truyền tên người cần lấy data vào dòng này trong file: 
-        ``` python
-            MakeDataFace('Viet Anh')
-         ```
+        ```python
+        MakeDataFace('Viet Anh')
+        ```
 
-      nhìn thẳng vào camerea rồi bấm `run` để chương trình tự động lấy đủ 500 gương mặt. Nên quay nhiều hướng khác nhau để data đa dạng, tránh overfitting. Code tự điều chỉnh ánh sáng và tương phản nên không nhất thiết cần thu thập gương mặt mọi người ở cùng vị trí (nhưng có vẫn là hơn)
+      Nhìn thẳng vào camerea rồi bấm `run` để chương trình tự động lấy đủ 500 gương mặt. Nên quay nhiều hướng khác nhau để data đa dạng, tránh overfitting. Code tự điều chỉnh ánh sáng và tương phản nên không nhất thiết cần thu thập gương mặt mọi người ở cùng vị trí (nhưng có vẫn là hơn)
 
     - Làm tương tự cho những người còn lại đến khi hết.
 
-    ![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/thu%20thap.png)
-    <p align = 'center'> Thu thập hình ảnh gương mặt </p>
+      ![](https://raw.githubusercontent.com/vietanhlee/Face-Recognizer/refs/heads/main/display_github/thu%20thap.png)
+      <p align = 'center'> Thu thập hình ảnh gương mặt </p>
     
-    > Ảnh sau khi được thu thập sẽ được lưu vào thư mục `data_image_raw/ten_người_đó`
+      > Ảnh sau khi được thu thập sẽ được lưu vào thư mục `data_image_raw/ten_người_đó`
 
 
 ## 3. Xử lý data
@@ -96,6 +91,6 @@ Chỉ cần chạy file `main code\main.py` để bắt đầu sử dụng.
 
 Project tích hợp trên PyQt5 [tại đây](https://github.com/vietanhlee/face-recognition-Qt5)
 
-![](https://raw.githubusercontent.com/vietanhlee/face-recognition-Qt5/refs/heads/main/display_github/Screenshot%202025-02-09%20000604.png)
+![](https://github.com/vietanhlee/face-recognition-Qt5/blob/main/display_github/Screenshot%202025-02-10%20200413.png?raw=true)
 
 <p align = 'center'> Demo Qt5 </p>
